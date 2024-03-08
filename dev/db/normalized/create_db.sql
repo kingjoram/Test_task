@@ -1,0 +1,4 @@
+CREATE DATABASE task
+    WITH
+    OWNER = boss
+    ENCODING = 'UTF8'
