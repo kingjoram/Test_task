@@ -7,6 +7,8 @@ import (
 )
 
 type ICore interface {
+	GetShort(long string) (string, error)
+	GetLong(short string) (string, error)
 }
 
 type Core struct {
@@ -20,4 +22,14 @@ func GetCore(cfg *configs.Config, lg *slog.Logger, db postgres.IDbRepo) *Core {
 		lg: lg,
 		db: db,
 	}
+}
+
+func (core *Core) GetShort(long string) (string, error) {
+
+	return "", nil
+}
+
+func (core *Core) GetLong(short string) (string, error) {
+
+	return "", nil
 }

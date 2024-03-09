@@ -1,6 +1,8 @@
 package delivery
 
 import (
+	"encoding/json"
+	"io"
 	"log/slog"
 	"net/http"
 	"test/configs"
@@ -57,14 +59,49 @@ func (a *API) sendResponse(w http.ResponseWriter, r *http.Request, response requ
 func (a *API) GetInfo(w http.ResponseWriter, r *http.Request) {
 	a.lg.Info("new get info request")
 	response := requests.Response{Status: http.StatusOK, Body: nil}
-
-	if r.Method != http.MethodGet {
+	var responseBody string
+	if r.Method != http.MethodPost || r.Method != http.MethodGet {
 		response.Status = http.StatusMethodNotAllowed
 		a.lg.Info("get info forbidden method")
 		a.sendResponse(w, r, response)
 		return
 	}
 
+	var request string
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		a.lg.Error("get info error", "err", err.Error())
+		response.Status = http.StatusBadRequest
+		a.sendResponse(w, r, response)
+		return
+	}
+	err = json.Unmarshal(body, &request)
+	if err != nil {
+		a.lg.Error("get info error", "err", err.Error())
+		response.Status = http.StatusBadRequest
+		a.sendResponse(w, r, response)
+		return
+	}
+
+	if r.Method == http.MethodPost {
+		responseBody, err = a.core.GetShort(request)
+		if err != nil {
+			a.lg.Error("get info error", "err", err.Error())
+			response.Status = http.StatusBadRequest
+			a.sendResponse(w, r, response)
+			return
+		}
+	} else {
+		responseBody, err = a.core.GetLong(request)
+		if err != nil {
+			a.lg.Error("get info error", "err", err.Error())
+			response.Status = http.StatusBadRequest
+			a.sendResponse(w, r, response)
+			return
+		}
+	}
+
+	response.Body = responseBody
 	a.lg.Info("get info done successfully")
 	a.sendResponse(w, r, response)
 }
