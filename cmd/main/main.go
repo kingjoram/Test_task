@@ -6,6 +6,7 @@ import (
 	"os"
 	"test/configs"
 	"test/delivery"
+	"test/repository/memory"
 	"test/repository/postgres"
 	"test/usecase"
 
@@ -35,11 +36,14 @@ func main() {
 	switch config.Db {
 	case "postgres":
 		db, err = postgres.GetPostgreRepo(config, lg)
+	case "memory":
+		db, err = memory.GetMemoryRepo(lg)
 	}
 	if err != nil {
 		lg.Error("cant create repo")
 		return
 	}
+	lg.Info("repo is created")
 
 	core := usecase.GetCore(config, lg, db)
 	api := delivery.GetApi(core, lg, config)

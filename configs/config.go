@@ -28,7 +28,7 @@ var (
 	DEFAULT_SSLMODE     = "disable"
 	DEFAULT_MAXCONNS    = "10"
 	DEFAULT_TIMER       = "1"
-	DEFAULT_DB          = "postgres"
+	DEFAULT_DB          = "memory"
 	DEFAULT_SERVER_PORT = ":8080"
 )
 

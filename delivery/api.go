@@ -18,6 +18,7 @@ type API struct {
 }
 
 func GetApi(c *usecase.Core, l *slog.Logger, cfg *configs.Config) *API {
+	l.Info("creating api")
 	api := &API{
 		core:   c,
 		lg:     l.With("module", "api"),

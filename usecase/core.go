@@ -15,6 +15,7 @@ type Core struct {
 }
 
 func GetCore(cfg *configs.Config, lg *slog.Logger, db postgres.IDbRepo) *Core {
+	lg.Info("creating core")
 	return &Core{
 		lg: lg,
 		db: db,
