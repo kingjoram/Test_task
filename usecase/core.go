@@ -1,10 +1,13 @@
 package usecase
 
 import (
+	"errors"
 	"log/slog"
 	"test/configs"
 	"test/repository/postgres"
 )
+
+var ErrUncorrectInput = errors.New("got uncorrect input string")
 
 type ICore interface {
 	GetShort(long string) (string, error)
@@ -30,6 +33,8 @@ func (core *Core) GetShort(long string) (string, error) {
 }
 
 func (core *Core) GetLong(short string) (string, error) {
-
+	if len(short) != 10 {
+		return "", ErrUncorrectInput
+	}
 	return "", nil
 }
