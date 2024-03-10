@@ -61,46 +61,46 @@ func (a *API) GetInfo(w http.ResponseWriter, r *http.Request) {
 	a.lg.Info("new get info request")
 	response := requests.Response{Status: http.StatusOK, Body: nil}
 	var responseBody string
-	if r.Method != http.MethodPost || r.Method != http.MethodGet {
-		response.Status = http.StatusMethodNotAllowed
-		a.lg.Info("get info forbidden method")
-		a.sendResponse(w, r, response)
-		return
-	}
-
-	var request string
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		a.lg.Error("get info error", "err", err.Error())
-		response.Status = http.StatusBadRequest
-		a.sendResponse(w, r, response)
-		return
-	}
-	err = json.Unmarshal(body, &request)
-	if err != nil {
-		a.lg.Error("get info error", "err", err.Error())
-		response.Status = http.StatusBadRequest
-		a.sendResponse(w, r, response)
-		return
-	}
-
-	if r.Method == http.MethodPost {
-		responseBody, err = a.core.GetShort(request)
-	} else {
-		responseBody, err = a.core.GetLong(request)
-	}
-	if err != nil {
-		a.lg.Error("get info error", "err", err.Error())
-		if errors.Is(err, usecase.ErrUncorrectInput) {
+	if r.Method == http.MethodGet || r.Method == http.MethodPost {
+		var request string
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			a.lg.Error("get info error", "err", err.Error())
 			response.Status = http.StatusBadRequest
-		} else {
-			response.Status = http.StatusInternalServerError
+			a.sendResponse(w, r, response)
+			return
 		}
+		err = json.Unmarshal(body, &request)
+		if err != nil {
+			a.lg.Error("get info error", "err", err.Error())
+			response.Status = http.StatusBadRequest
+			a.sendResponse(w, r, response)
+			return
+		}
+
+		if r.Method == http.MethodPost {
+			responseBody, err = a.core.GetShort(request)
+		} else {
+			responseBody, err = a.core.GetLong(request)
+		}
+		if err != nil {
+			a.lg.Error("get info error", "err", err.Error())
+			if errors.Is(err, usecase.ErrUncorrectInput) {
+				response.Status = http.StatusBadRequest
+			} else {
+				response.Status = http.StatusInternalServerError
+			}
+			a.sendResponse(w, r, response)
+			return
+		}
+
+		response.Body = responseBody
+		a.lg.Info("get info done successfully")
 		a.sendResponse(w, r, response)
 		return
 	}
 
-	response.Body = responseBody
-	a.lg.Info("get info done successfully")
+	response.Status = http.StatusMethodNotAllowed
+	a.lg.Info("get info forbidden method")
 	a.sendResponse(w, r, response)
 }
