@@ -6,6 +6,7 @@ import (
 	"os"
 	"test/configs"
 	"test/delivery"
+	"test/repository"
 	"test/repository/memory"
 	"test/repository/postgres"
 	"test/usecase"
@@ -32,7 +33,7 @@ func main() {
 		return
 	}
 
-	var db postgres.IDbRepo
+	var db repository.IDbRepo
 	switch config.Db {
 	case "postgres":
 		db, err = postgres.GetPostgreRepo(config, lg)

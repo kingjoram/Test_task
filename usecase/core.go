@@ -3,7 +3,7 @@ package usecase
 import (
 	"log/slog"
 	"test/configs"
-	"test/repository/postgres"
+	"test/repository"
 )
 
 type ICore interface {
@@ -11,10 +11,10 @@ type ICore interface {
 
 type Core struct {
 	lg *slog.Logger
-	db postgres.IDbRepo
+	db repository.IDbRepo
 }
 
-func GetCore(cfg *configs.Config, lg *slog.Logger, db postgres.IDbRepo) *Core {
+func GetCore(cfg *configs.Config, lg *slog.Logger, db repository.IDbRepo) *Core {
 	lg.Info("creating core")
 	return &Core{
 		lg: lg,

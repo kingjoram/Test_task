@@ -11,13 +11,6 @@ type RepoInMemory struct {
 	memory map[string]string
 }
 
-type IDbRepo interface {
-	InsertUrl(url models.Url) error
-	GetId() (uint64, error)
-	GetShort(long string) (string, error)
-	GetLong(short string) (string, error)
-}
-
 func GetMemoryRepo(lg *slog.Logger) (*RepoInMemory, error) {
 	lg.Info("creating memory repo")
 	return &RepoInMemory{
