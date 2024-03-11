@@ -99,3 +99,8 @@ func (repo *RepoPostgre) GetLong(short string) (string, error) {
 
 	return short, nil
 }
+
+func (repo *RepoPostgre) SaveUrl(short string, long string) error {
+
+	return nil
+}

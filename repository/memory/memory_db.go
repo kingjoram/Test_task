@@ -62,3 +62,8 @@ func (repo *RepoInMemory) GetLong(short string) (string, error) {
 
 	return long, nil
 }
+
+func (repo *RepoInMemory) SaveUrl(short string, long string) error {
+
+	return nil
+}

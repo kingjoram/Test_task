@@ -2,7 +2,6 @@ package delivery
 
 import (
 	"encoding/json"
-	"errors"
 	"io"
 	"log/slog"
 	"net/http"
@@ -60,9 +59,11 @@ func (a *API) sendResponse(w http.ResponseWriter, r *http.Request, response requ
 func (a *API) GetInfo(w http.ResponseWriter, r *http.Request) {
 	a.lg.Info("new get info request")
 	response := requests.Response{Status: http.StatusOK, Body: nil}
-	var responseBody string
+
 	if r.Method == http.MethodGet || r.Method == http.MethodPost {
 		var request string
+		var responseBody string
+
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
 			a.lg.Error("get info error", "err", err.Error())
@@ -85,9 +86,12 @@ func (a *API) GetInfo(w http.ResponseWriter, r *http.Request) {
 		}
 		if err != nil {
 			a.lg.Error("get info error", "err", err.Error())
-			if errors.Is(err, usecase.ErrUncorrectInput) {
+			switch err {
+			case usecase.ErrUncorrectInput:
 				response.Status = http.StatusBadRequest
-			} else {
+			case usecase.ErrNotFound:
+				response.Status = http.StatusNotFound
+			default:
 				response.Status = http.StatusInternalServerError
 			}
 			a.sendResponse(w, r, response)
