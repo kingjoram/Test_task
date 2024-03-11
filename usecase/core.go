@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"regexp"
 	"test/configs"
+	"test/pkg/models"
 	"test/repository"
 
 	"github.com/sqids/sqids-go"
@@ -69,7 +70,7 @@ func (core *Core) GetShort(long string) (string, error) {
 	}
 	short = "http://somedomen.ru/" + short
 
-	err = core.db.SaveUrl(short, long)
+	err = core.db.InsertUrl(models.Url{Short: short, Long: long})
 	if err != nil {
 		core.lg.Error("get short save error", "err", err.Error())
 		return "", err

@@ -9,7 +9,7 @@ import (
 	"test/pkg/models"
 	"time"
 
-	_ "github.com/jackc/pgx/stdlib"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 type RepoPostgre struct {
@@ -98,9 +98,4 @@ func (repo *RepoPostgre) GetLong(short string) (string, error) {
 	}
 
 	return short, nil
-}
-
-func (repo *RepoPostgre) SaveUrl(short string, long string) error {
-
-	return nil
 }

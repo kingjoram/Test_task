@@ -7,5 +7,4 @@ type IDbRepo interface {
 	GetId() (uint64, error)
 	GetShort(long string) (string, error)
 	GetLong(short string) (string, error)
-	SaveUrl(short string, long string) error
 }
