@@ -21,7 +21,7 @@ func GetMemoryRepo(lg *slog.Logger) (*RepoInMemory, error) {
 func (repo *RepoInMemory) InsertUrl(url models.Url) error {
 	repo.mu.RLock()
 	repo.memory[url.Short] = url.Long
-	repo.mu.Unlock()
+	repo.mu.RUnlock()
 
 	return nil
 }

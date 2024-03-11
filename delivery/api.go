@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 	"test/configs"
+	"test/pkg/models"
 	"test/pkg/requests"
 	"test/usecase"
 
@@ -61,7 +62,7 @@ func (a *API) GetInfo(w http.ResponseWriter, r *http.Request) {
 	response := requests.Response{Status: http.StatusOK, Body: nil}
 
 	if r.Method == http.MethodGet || r.Method == http.MethodPost {
-		var request string
+		var request models.Url
 		var responseBody string
 
 		body, err := io.ReadAll(r.Body)
@@ -80,9 +81,9 @@ func (a *API) GetInfo(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if r.Method == http.MethodPost {
-			responseBody, err = a.core.GetShort(request)
+			responseBody, err = a.core.GetShort(request.Long)
 		} else {
-			responseBody, err = a.core.GetLong(request)
+			responseBody, err = a.core.GetLong(request.Short)
 		}
 		if err != nil {
 			a.lg.Error("get info error", "err", err.Error())

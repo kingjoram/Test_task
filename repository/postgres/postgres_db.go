@@ -97,5 +97,5 @@ func (repo *RepoPostgre) GetLong(short string) (string, error) {
 		return "", fmt.Errorf("get long error: %w", err)
 	}
 
-	return short, nil
+	return long, nil
 }

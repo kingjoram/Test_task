@@ -57,25 +57,33 @@ func (core *Core) GetShort(long string) (string, error) {
 		core.lg.Info("uncorrect input string")
 		return "", ErrUncorrectInput
 	}
+	short, err := core.db.GetShort(long)
+	if err != nil {
+		core.lg.Error("get short encode error", "err", err.Error())
+		return "", fmt.Errorf("get short error: %w", err)
+	}
+	if short != "" {
+		return short, nil
+	}
 
 	id, err := core.db.GetId()
 	if err != nil {
 		core.lg.Error("get short get id error", "err", err.Error())
-		return "", err
+		return "", fmt.Errorf("get short error: %w", err)
 	}
-	short, err := core.coder.Encode([]uint64{id})
+	short, err = core.coder.Encode([]uint64{id})
 	if err != nil {
 		core.lg.Error("get short encode error", "err", err.Error())
-		return "", err
+		return "", fmt.Errorf("get short error: %w", err)
 	}
 	short = "http://somedomen.ru/" + short
 
 	err = core.db.InsertUrl(models.Url{Short: short, Long: long})
 	if err != nil {
 		core.lg.Error("get short save error", "err", err.Error())
-		return "", err
+		return "", fmt.Errorf("get short error: %w", err)
 	}
-	return "", nil
+	return short, nil
 }
 
 func (core *Core) GetLong(short string) (string, error) {

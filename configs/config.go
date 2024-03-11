@@ -2,7 +2,6 @@ package configs
 
 import (
 	"flag"
-	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -37,6 +36,5 @@ func ReadConfig() (*Config, error) {
 		return nil, err
 	}
 
-	fmt.Println(dsnConfig)
 	return &dsnConfig, nil
 }
