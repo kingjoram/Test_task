@@ -23,7 +23,7 @@ type Config struct {
 func ReadConfig() (*Config, error) {
 	flag.Parse()
 	var path string
-	flag.StringVar(&path, "config_path", "config.yaml", "Путь к конфигу")
+	flag.StringVar(&path, "config_path", "./configs/config.yaml", "Путь к конфигу")
 
 	dsnConfig := Config{}
 	dsnFile, err := os.ReadFile(path)

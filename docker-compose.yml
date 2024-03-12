@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+  application:
+    build: ./
+    command: ./main
+    ports:
+      - 8081:8081
+    depends_on:
+      - db
+
+  db:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - ./dev/db/normalized:/var/lib/postgresql/task-data
+    environment:
+      POSTGRES_PASSWORD: TestPassword
+      POSTGRES_USER: testuser
+    ports:
+      - 5432:5432
