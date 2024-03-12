@@ -18,6 +18,7 @@ var (
 	AlphabetForShort  = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_"
 )
 
+//go:generate mockgen -source=core.go -destination=core_mock.go -package=usecase
 type ICore interface {
 	GetShort(long string) (string, error)
 	GetLong(short string) (string, error)
@@ -57,9 +58,10 @@ func (core *Core) GetShort(long string) (string, error) {
 		core.lg.Info("uncorrect input string")
 		return "", ErrUncorrectInput
 	}
+
 	short, err := core.db.GetShort(long)
 	if err != nil {
-		core.lg.Error("get short encode error", "err", err.Error())
+		core.lg.Error("get short error", "err", err.Error())
 		return "", fmt.Errorf("get short error: %w", err)
 	}
 	if short != "" {
