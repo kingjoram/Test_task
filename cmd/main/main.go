@@ -10,8 +10,6 @@ import (
 	"test/repository/memory"
 	"test/repository/postgres"
 	"test/usecase"
-
-	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -20,12 +18,6 @@ func main() {
 	logFile, _ := os.Create(path)
 	lg := slog.New(slog.NewJSONHandler(logFile, nil))
 	lg.Info("start main")
-
-	err := godotenv.Load()
-	if err != nil {
-		lg.Error("no .env file found")
-	}
-	lg.Info("load .env")
 
 	config, err := configs.ReadConfig()
 	if err != nil {
